@@ -28,11 +28,32 @@ class _VittaOrbState extends State<VittaOrb>
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedBuilder(
+    // Uses the ring image from Figma when it is in assets/images/ring.png and
+    // falls back to a painted ring otherwise. The image has a soft glow
+    // around the ring, so it is drawn larger than the box and not clipped.
+    final fallback = AnimatedBuilder(
       animation: _controller,
       builder: (context, _) => CustomPaint(
         size: Size.square(widget.size),
         painter: _OrbPainter(_controller.value),
+      ),
+    );
+    return SizedBox.square(
+      dimension: widget.size,
+      child: OverflowBox(
+        minWidth: 0,
+        minHeight: 0,
+        maxWidth: widget.size * 1.45,
+        maxHeight: widget.size * 1.45,
+        child: RotationTransition(
+          turns: _controller,
+          child: Image.asset(
+            'assets/images/ring.png',
+            width: widget.size * 1.45,
+            height: widget.size * 1.45,
+            errorBuilder: (_, __, ___) => fallback,
+          ),
+        ),
       ),
     );
   }

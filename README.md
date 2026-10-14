@@ -42,6 +42,7 @@ put them in `assets/images/` with exactly these names:
 | `avatar.png` | Image / Avatar |
 | `offer_dining.png` | Image / Offer Illustration (the dining cloche) |
 | `offer_concert.png` | Image / Offer Illustration (the concert one) |
+| `ring.png` | Glowing ring shown on long press |
 | `logo_lcid.png` | Image / Stock Logo - LCID |
 | `logo_chrn.png` | Image / Stock Logo - CHRN |
 | `logo_sah.png` | Image / Stock Logo - SAH |
