@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:flutter/gestures.dart' show PointerDeviceKind;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -30,6 +31,7 @@ class VittaApp extends StatelessWidget {
         ),
         scaffoldBackgroundColor: VColors.screenBg,
       ),
+      scrollBehavior: const _AppScrollBehavior(),
       builder: _frame,
       home: const HomeScreen(),
     );
@@ -66,5 +68,25 @@ class VittaApp extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+/// No scrollbars (the Figma design has none), and mouse drag scrolls like a
+/// finger so the Chrome preview behaves like the phone.
+class _AppScrollBehavior extends MaterialScrollBehavior {
+  const _AppScrollBehavior();
+
+  @override
+  Set<PointerDeviceKind> get dragDevices => {
+        PointerDeviceKind.touch,
+        PointerDeviceKind.mouse,
+        PointerDeviceKind.stylus,
+        PointerDeviceKind.trackpad,
+      };
+
+  @override
+  Widget buildScrollbar(
+      BuildContext context, Widget child, ScrollableDetails details) {
+    return child;
   }
 }

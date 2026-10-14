@@ -85,18 +85,24 @@ class _HomeScreenState extends State<HomeScreen> {
           height: 44,
           child: Row(
             children: [
+              // The avatar PNG is a transparent cut-out, so it needs the
+              // light-blue circle behind it.
               ClipOval(
-                child: SizedBox(
-                  width: 40,
-                  height: 40,
-                  child: const AssetOrPlaceholder(
-                    'assets/images/avatar.png',
+                child: ColoredBox(
+                  color: VColors.blue100,
+                  child: SizedBox(
                     width: 40,
                     height: 40,
-                    radius: 20,
-                    icon: Icons.person,
-                    color: VColors.blue100,
-                    iconColor: VColors.primary,
+                    child: const AssetOrPlaceholder(
+                      'assets/images/avatar.png',
+                      width: 40,
+                      height: 40,
+                      alignment: Alignment.topCenter,
+                      radius: 20,
+                      icon: Icons.person,
+                      color: VColors.blue100,
+                      iconColor: VColors.primary,
+                    ),
                   ),
                 ),
               ),

@@ -35,6 +35,7 @@ class AssetOrPlaceholder extends StatelessWidget {
     required this.width,
     required this.height,
     this.fit = BoxFit.cover,
+    this.alignment = Alignment.center,
     this.radius = 8,
     this.icon = Icons.image_outlined,
     this.color = const Color(0x1A084BA4),
@@ -45,6 +46,7 @@ class AssetOrPlaceholder extends StatelessWidget {
   final double width;
   final double height;
   final BoxFit fit;
+  final Alignment alignment;
   final double radius;
   final IconData icon;
   final Color color;
@@ -60,6 +62,7 @@ class AssetOrPlaceholder extends StatelessWidget {
         width: width,
         height: height,
         fit: fit,
+        alignment: alignment,
         errorBuilder: (_, __, ___) => DecoratedBox(
           decoration: BoxDecoration(
             color: color,
