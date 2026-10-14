@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../state/vitta_session.dart';
+
 import '../theme/tokens.dart';
 
 /// Cross-fade page transition used between the Vitta screens.
@@ -238,7 +240,14 @@ class VittaDock extends StatelessWidget {
 
 /// Header with back, Vitta brand and search / minimize / close.
 class VittaTopBar extends StatelessWidget {
-  const VittaTopBar({super.key, this.serifBrand = false});
+  const VittaTopBar({
+    super.key,
+    this.serifBrand = false,
+    this.minimizeStatus = MiniStatus.ready,
+  });
+
+  /// What the minimized pill on Home should show after tapping Minimize.
+  final MiniStatus minimizeStatus;
 
   /// A05 uses a serif wordmark in Figma (DM Serif Text); A04 uses Roboto.
   final bool serifBrand;
@@ -272,10 +281,14 @@ class VittaTopBar extends StatelessWidget {
         ),
         const Spacer(),
         _btn(context, Icons.search, 'Search', () => showProto(context, 'Search')),
-        _btn(context, Icons.picture_in_picture_alt_outlined, 'Minimize',
-            () => showProto(context, 'Minimize')),
-        _btn(context, Icons.close, 'Close',
-            () => Navigator.of(context).popUntil((r) => r.isFirst)),
+        _btn(context, Icons.picture_in_picture_alt_outlined, 'Minimize', () {
+          VittaSession.minimize(minimizeStatus);
+          Navigator.of(context).popUntil((r) => r.isFirst);
+        }),
+        _btn(context, Icons.close, 'Close', () {
+          VittaSession.clear();
+          Navigator.of(context).popUntil((r) => r.isFirst);
+        }),
       ],
     );
   }

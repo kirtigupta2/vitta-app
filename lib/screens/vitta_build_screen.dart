@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../state/vitta_session.dart';
 import '../widgets/agent_log.dart';
 import '../widgets/common.dart';
 import 'card_intro_screen.dart';
@@ -88,7 +89,7 @@ class _VittaBuildScreenState extends State<VittaBuildScreen> {
               top: pad.top + 12,
               left: 16,
               right: 16,
-              child: const VittaTopBar(),
+              child: const VittaTopBar(minimizeStatus: MiniStatus.building),
             ),
             Positioned(
               top: pad.top + 68,

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../state/vitta_session.dart';
 import '../theme/tokens.dart';
 import '../widgets/agent_log.dart';
 import '../widgets/common.dart';
@@ -252,7 +253,10 @@ class _CardIntroScreenState extends State<CardIntroScreen> {
               top: pad.top + 12,
               left: 16,
               right: 16,
-              child: const VittaTopBar(serifBrand: true),
+              child: const VittaTopBar(
+                serifBrand: true,
+                minimizeStatus: MiniStatus.ready,
+              ),
             ),
             Positioned(
               left: 16,
