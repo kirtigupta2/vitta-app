@@ -476,11 +476,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 },
               ),
             ),
-            // Minimized Vitta: a floating pill above the nav bar.
+            // Minimized Vitta: small floating card, bottom right (Figma 24:8829).
             Positioned(
-              left: 17.5,
-              right: 17.5,
-              bottom: 16 + pad.bottom + 58 + 10,
+              right: 16,
+              bottom: pad.bottom + 100,
               child: ValueListenableBuilder<MiniStatus?>(
                 valueListenable: VittaSession.mini,
                 builder: (context, status, _) => AnimatedSwitcher(
@@ -488,11 +487,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   switchInCurve: Curves.easeOutCubic,
                   transitionBuilder: (child, animation) => FadeTransition(
                     opacity: animation,
-                    child: SlideTransition(
-                      position: Tween<Offset>(
-                        begin: const Offset(0, 0.4),
-                        end: Offset.zero,
-                      ).animate(animation),
+                    child: ScaleTransition(
+                      alignment: Alignment.bottomRight,
+                      scale: Tween<double>(begin: 0.85, end: 1).animate(animation),
                       child: child,
                     ),
                   ),
@@ -783,7 +780,7 @@ class _TabButton extends StatelessWidget {
   }
 }
 
-/// The minimized Vitta agent (shown on Home after tapping Minimize).
+/// The minimized Vitta agent: a 155 x 135 card at the bottom right of Home.
 class _MiniVitta extends StatelessWidget {
   const _MiniVitta({
     super.key,
@@ -796,95 +793,136 @@ class _MiniVitta extends StatelessWidget {
   final VoidCallback onOpen;
   final VoidCallback onDismiss;
 
+  Widget _smallButton(IconData icon, String tip, VoidCallback onTap) {
+    return Semantics(
+      button: true,
+      label: tip,
+      child: InkWell(
+        borderRadius: BorderRadius.circular(12),
+        onTap: onTap,
+        child: SizedBox(
+          width: 24,
+          height: 24,
+          child: Icon(icon, size: 12, weight: 500, color: VColors.textPrimary),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final ready = status == MiniStatus.ready;
-    return DecoratedBox(
+    return Container(
+      width: 155,
+      height: 135,
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(28),
-        border: Border.all(color: const Color(0x266D8FFF)),
+        borderRadius: BorderRadius.circular(16),
         boxShadow: VShadows.floating,
+        gradient: const LinearGradient(
+          begin: Alignment.centerLeft,
+          end: Alignment.centerRight,
+          colors: [Color(0xFFE9F0F9), Color(0xFFFBFCFE), Color(0xFFFCE9DC)],
+          stops: [0.0, 0.5, 1.0],
+        ),
       ),
       child: Material(
         color: Colors.transparent,
+        borderRadius: BorderRadius.circular(16),
+        clipBehavior: Clip.antiAlias,
         child: InkWell(
-          borderRadius: BorderRadius.circular(28),
           onTap: onOpen,
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(10, 8, 6, 8),
-            child: Row(
-              children: [
-                SizedBox(
-                  width: 40,
-                  height: 40,
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      Container(
-                        width: 34,
-                        height: 34,
-                        decoration: const BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: VColors.primaryContainer,
-                        ),
-                        child: const Icon(Icons.auto_awesome,
-                            size: 18, color: VColors.primary),
+          child: Stack(
+            children: [
+              Positioned(
+                left: 12,
+                right: 12,
+                top: 12,
+                child: Row(
+                  children: [
+                    const Icon(Icons.auto_awesome,
+                        size: 16, color: VColors.primary),
+                    const SizedBox(width: 5),
+                    Text(
+                      'Vitta',
+                      style: TextStyle(
+                        fontFamily: 'serif',
+                        fontSize: 14,
+                        height: 16.5 / 14,
+                        color: VColors.primary,
                       ),
-                      if (!ready)
-                        const SizedBox(
-                          width: 40,
-                          height: 40,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                            color: VColors.primary,
-                          ),
-                        ),
-                    ],
-                  ),
+                    ),
+                    const Spacer(),
+                    _smallButton(Symbols.open_in_full, 'Open Vitta', onOpen),
+                    const SizedBox(width: 4),
+                    _smallButton(Symbols.close, 'Close Vitta', onDismiss),
+                  ],
                 ),
-                const SizedBox(width: 10),
-                Expanded(
+              ),
+              Positioned(
+                left: 12,
+                top: 37,
+                width: 129.667,
+                height: 85.167,
+                child: Container(
+                  padding: const EdgeInsets.all(8.667),
+                  decoration: BoxDecoration(
+                    color: const Color(0x80FFFFFF),
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(
+                        color: const Color(0x14FFFFFF), width: 0.667),
+                  ),
                   child: Column(
-                    mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Vitta',
-                          style: vText(14, FontWeight.w700, VColors.textPrimary,
-                              height: 1.2)),
-                      Text(
-                        ready
-                            ? 'Your card recommendation is ready'
-                            : 'Building your recommendation...',
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: vText(12, FontWeight.w400, VColors.textSecondary,
-                            height: 1.3),
+                      SizedBox(
+                        height: 35,
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            'Save on Dining with Credit Card',
+                            style: vText(
+                                14, FontWeight.w500, VColors.textPrimary),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      SizedBox(
+                        width: double.infinity,
+                        child: ready
+                            ? Text(
+                                'Tap to view details',
+                                textAlign: TextAlign.center,
+                                maxLines: 1,
+                                style: vText(
+                                    12, FontWeight.w400, VColors.textSecondary,
+                                    height: 1.0),
+                              )
+                            : Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const SizedBox(
+                                    width: 10,
+                                    height: 10,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 1.5,
+                                      color: VColors.primary,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 6),
+                                  Text(
+                                    'Building...',
+                                    style: vText(12, FontWeight.w400,
+                                        VColors.textSecondary,
+                                        height: 1.0),
+                                  ),
+                                ],
+                              ),
                       ),
                     ],
                   ),
                 ),
-                if (ready)
-                  Container(
-                    margin: const EdgeInsets.only(right: 2),
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                    decoration: BoxDecoration(
-                      color: VColors.primary,
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    child: Text('View',
-                        style: vText(13, FontWeight.w700, Colors.white)),
-                  ),
-                IconButton(
-                  tooltip: 'Dismiss',
-                  visualDensity: VisualDensity.compact,
-                  onPressed: onDismiss,
-                  icon: const Icon(Icons.close,
-                      size: 18, color: VColors.textSecondary),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
