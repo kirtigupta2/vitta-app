@@ -141,9 +141,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text('Total Balance',
-                      style: vText(14, FontWeight.w400, Colors.white)),
+                      style: vText(14, FontWeight.w400, Colors.white,
+                          height: 1.25)),
                   Text(_balance,
-                      style: vText(16, FontWeight.w700, Colors.white)),
+                      style: vText(16, FontWeight.w700, Colors.white,
+                          height: 1.1)),
                 ],
               ),
               const Spacer(),

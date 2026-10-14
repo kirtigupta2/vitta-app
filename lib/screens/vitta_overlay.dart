@@ -22,7 +22,11 @@ class AskVittaCard extends StatelessWidget {
         onLongPressStart: (details) {
           HapticFeedback.mediumImpact();
           final box = context.findRenderObject() as RenderBox;
-          final rect = box.localToGlobal(Offset.zero) & box.size;
+          // Measure relative to the app's own area, so it stays correct when
+          // the app is shown in a phone-sized frame on the web.
+          final area = Navigator.of(context).context.findRenderObject() as RenderBox;
+          final rect = box.localToGlobal(Offset.zero, ancestor: area) & box.size;
+          final press = area.globalToLocal(details.globalPosition);
           Navigator.of(context).push(
             PageRouteBuilder<void>(
               opaque: false,
@@ -30,7 +34,7 @@ class AskVittaCard extends StatelessWidget {
               reverseTransitionDuration: const Duration(milliseconds: 200),
               pageBuilder: (_, __, ___) => VittaOverlay(
                 cardRect: rect,
-                pressPoint: details.globalPosition,
+                pressPoint: press,
                 card: child,
               ),
               transitionsBuilder: (_, animation, __, page) =>
