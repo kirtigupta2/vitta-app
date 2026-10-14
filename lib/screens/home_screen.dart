@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:material_symbols_icons/symbols.dart';
 
 import '../theme/tokens.dart';
 import '../widgets/common.dart';
@@ -152,7 +153,7 @@ class _HomeScreenState extends State<HomeScreen> {
               IconButton(
                 tooltip: _hidden ? 'Show balance' : 'Hide balance',
                 padding: EdgeInsets.zero,
-                constraints: const BoxConstraints.tightFor(width: 44, height: 44),
+                constraints: const BoxConstraints.tightFor(width: 28, height: 44),
                 onPressed: () => setState(() => _hidden = !_hidden),
                 icon: Icon(
                   _hidden
@@ -162,13 +163,17 @@ class _HomeScreenState extends State<HomeScreen> {
                   color: Colors.white,
                 ),
               ),
-              IconButton(
-                tooltip: 'Expand balance details',
-                padding: EdgeInsets.zero,
-                constraints: const BoxConstraints.tightFor(width: 44, height: 44),
-                onPressed: _showBalanceDetails,
-                icon: const Icon(Icons.keyboard_arrow_down,
-                    size: 20, color: Colors.white),
+              Transform.translate(
+                offset: const Offset(5, 0),
+                child: IconButton(
+                  tooltip: 'Expand balance details',
+                  padding: EdgeInsets.zero,
+                  constraints:
+                      const BoxConstraints.tightFor(width: 28, height: 44),
+                  onPressed: _showBalanceDetails,
+                  icon: const Icon(Icons.keyboard_arrow_down,
+                      size: 20, color: Colors.white),
+                ),
               ),
             ],
           ),
@@ -178,14 +183,14 @@ class _HomeScreenState extends State<HomeScreen> {
           height: 54,
           child: Row(
             children: const [
-              Expanded(child: _QuickAction(Icons.swap_horiz, 'Transfer')),
+              Expanded(child: _QuickAction(Symbols.swap_horiz, 'Transfer')),
               _QuickDivider(),
-              Expanded(child: _QuickAction(Icons.receipt_long_outlined, 'Statement')),
+              Expanded(child: _QuickAction(Symbols.receipt_long, 'Statement')),
               _QuickDivider(),
-              Expanded(child: _QuickAction(Icons.star_border, 'Rewards')),
+              Expanded(child: _QuickAction(Symbols.star, 'Rewards')),
               _QuickDivider(),
               Expanded(
-                  child: _QuickAction(Icons.account_balance_wallet_outlined, 'Wallet')),
+                  child: _QuickAction(Symbols.account_balance_wallet, 'Wallet')),
             ],
           ),
         ),
@@ -248,33 +253,37 @@ class _HomeScreenState extends State<HomeScreen> {
               style: vText(14, FontWeight.w400, VColors.textPrimary, height: 1.3),
             ),
             const SizedBox(height: 16),
-            const Wrap(
-              spacing: 24,
-              runSpacing: 12,
+            const Row(
               children: [
-                _Stock(
-                  symbol: 'LCID',
-                  change: '+28.79%',
-                  asset: 'assets/images/logo_lcid.png',
-                  bg: Color(0xFF111111),
-                  fg: Colors.white70,
-                  icon: Icons.electric_car,
+                Expanded(
+                  child: _Stock(
+                    symbol: 'LCID',
+                    change: '+28.79%',
+                    asset: 'assets/images/logo_lcid.png',
+                    bg: Color(0xFF111111),
+                    fg: Colors.white70,
+                    icon: Icons.electric_car,
+                  ),
                 ),
-                _Stock(
-                  symbol: 'CHRN',
-                  change: '+28.71%',
-                  asset: 'assets/images/logo_chrn.png',
-                  bg: Color(0xFFEEF2F7),
-                  fg: Colors.black54,
-                  icon: Icons.circle_outlined,
+                Expanded(
+                  child: _Stock(
+                    symbol: 'CHRN',
+                    change: '+28.71%',
+                    asset: 'assets/images/logo_chrn.png',
+                    bg: Color(0xFFEEF2F7),
+                    fg: Colors.black54,
+                    icon: Icons.circle_outlined,
+                  ),
                 ),
-                _Stock(
-                  symbol: 'SAH',
-                  change: '+7.96%',
-                  asset: 'assets/images/logo_sah.png',
-                  bg: Color(0xFFE23B2E),
-                  fg: Colors.white,
-                  icon: Icons.bolt,
+                Expanded(
+                  child: _Stock(
+                    symbol: 'SAH',
+                    change: '+7.96%',
+                    asset: 'assets/images/logo_sah.png',
+                    bg: Color(0xFFE23B2E),
+                    fg: Colors.white,
+                    icon: Icons.bolt,
+                  ),
                 ),
               ],
             ),
@@ -422,6 +431,29 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             ),
+            // Soft fade so the page content does not run into the nav bar.
+            Positioned(
+              left: 0,
+              right: 0,
+              bottom: 0,
+              height: 110 + pad.bottom,
+              child: const IgnorePointer(
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        Color(0x00F4F8FC),
+                        Color(0xE6F4F8FC),
+                        Color(0xF7F4F8FC),
+                      ],
+                      stops: [0.0, 0.5, 1.0],
+                    ),
+                  ),
+                ),
+              ),
+            ),
             // Floating bottom navigation.
             Positioned(
               left: 17.5,
@@ -499,7 +531,7 @@ class _QuickAction extends StatelessWidget {
         children: [
           SizedBox(
             height: 36,
-            child: Icon(icon, size: 24, color: Colors.white),
+            child: Icon(icon, size: 24, weight: 300, color: Colors.white),
           ),
           Text(label, style: vText(12, FontWeight.w400, Colors.white, height: 1.5)),
         ],
@@ -559,15 +591,20 @@ class _Stock extends StatelessWidget {
           iconColor: fg,
         ),
         const SizedBox(width: 6),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(symbol,
-                style: vText(14, FontWeight.w500, VColors.textSecondary,
-                    height: 1.3)),
-            Text(change,
-                style: vText(12, FontWeight.w500, VColors.success, height: 1.5)),
-          ],
+        Flexible(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(symbol,
+                  maxLines: 1,
+                  style: vText(14, FontWeight.w500, VColors.textSecondary,
+                      height: 1.3)),
+              Text(change,
+                  maxLines: 1,
+                  style: vText(12, FontWeight.w500, VColors.success,
+                      height: 1.5)),
+            ],
+          ),
         ),
       ],
     );
