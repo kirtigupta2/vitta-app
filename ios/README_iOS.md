@@ -1,22 +1,17 @@
-# Vitta – iOS (SwiftUI) – setup on the Mac
+# Vitta – iOS (SwiftUI)
 
-Screens: A01 Home, A02 long-press ring, A03 suggestions (tap "Best fit for me"
-or type and send), A04 building recommendation, A05 card intro.
+## Easiest way (on the Mac)
+1. Open Terminal and run:  git clone https://github.com/kirtigupta2/vitta-app.git
+   (or on github.com click Code > Download ZIP and unzip it)
+2. Open the `ios` folder and double-click **Vitta.xcodeproj**.
+3. At the top pick an iPhone simulator and press Cmd+R.
+4. Optional live previews: open Previews.swift > Editor > Canvas > Resume.
 
-1. Xcode > File > New > Project > iOS > App. Name: Vitta, Interface: SwiftUI,
-   Language: Swift. Minimum iOS: 16.0 (Target > General > Minimum Deployments).
-2. In the project navigator delete the generated `VittaApp.swift` (or
-   `<Name>App.swift`) and `ContentView.swift` (Move to Trash). Also delete the
-   generated `Assets.xcassets`.
-3. Drag the whole `Vitta` folder contents (the .swift files AND `Assets.xcassets`)
-   into the project. Tick "Copy items if needed" and your app target.
-4. Open `Previews.swift`, then Editor > Canvas > Resume to see each screen live. Or press Run (Cmd+R) on an iPhone 15 or newer simulator and long-press a card.
+If Xcode says the project cannot be opened, use the manual way below.
 
-The catalog also contains AppIcon and AccentColor, so Xcode does not complain about them.
+## Manual way
+Create a new iOS App project in Xcode (SwiftUI, Swift, Storage None), delete its
+ContentView.swift, the *App.swift file and Assets.xcassets, then drag everything
+inside the `Vitta` folder into the project (tick "Copy items if needed").
 
-Images and icons are already inside `Assets.xcassets` with the same names as the
-Android app. `qa_statement` (Statement icon) was never provided, so an SF Symbol
-is used until you add `qa_statement.svg` as a new image set named `qa_statement`.
-Missing images fall back to placeholders, so the app never crashes.
-
-If Xcode shows errors, send me a screenshot or the text of the red error.
+`qa_statement` (Statement icon) was never provided; an SF Symbol is used.
