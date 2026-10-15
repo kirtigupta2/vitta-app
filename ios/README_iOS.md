@@ -12,6 +12,8 @@ or type and send), A04 building recommendation, A05 card intro.
    into the project. Tick "Copy items if needed" and your app target.
 4. Open `Previews.swift`, then Editor > Canvas > Resume to see each screen live. Or press Run (Cmd+R) on an iPhone 15 or newer simulator and long-press a card.
 
+The catalog also contains AppIcon and AccentColor, so Xcode does not complain about them.
+
 Images and icons are already inside `Assets.xcassets` with the same names as the
 Android app. `qa_statement` (Statement icon) was never provided, so an SF Symbol
 is used until you add `qa_statement.svg` as a new image set named `qa_statement`.
