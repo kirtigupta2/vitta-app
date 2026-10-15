@@ -730,7 +730,7 @@ class _MiniVitta extends StatelessWidget {
   final VoidCallback onOpen;
   final VoidCallback onDismiss;
 
-  Widget _smallButton(IconData icon, String tip, VoidCallback onTap) {
+  Widget _smallButton(Widget icon, String tip, VoidCallback onTap) {
     return Semantics(
       button: true,
       label: tip,
@@ -740,7 +740,7 @@ class _MiniVitta extends StatelessWidget {
         child: SizedBox(
           width: 24,
           height: 24,
-          child: Icon(icon, size: 12, weight: 500, color: VColors.textPrimary),
+          child: icon,
         ),
       ),
     );
@@ -789,9 +789,19 @@ class _MiniVitta extends StatelessWidget {
                       ),
                     ),
                     const Spacer(),
-                    _smallButton(Symbols.open_in_full, 'Open Vitta', onOpen),
+                    _smallButton(
+                      SvgPicture.asset('assets/icons/maximize.svg',
+                          width: 24, height: 24),
+                      'Open Vitta',
+                      onOpen,
+                    ),
                     const SizedBox(width: 4),
-                    _smallButton(Symbols.close, 'Close Vitta', onDismiss),
+                    _smallButton(
+                      const Icon(Icons.close,
+                          size: 12, color: VColors.textPrimary),
+                      'Close Vitta',
+                      onDismiss,
+                    ),
                   ],
                 ),
               ),
