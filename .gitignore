@@ -40,3 +40,4 @@ pubspec.lock
 **/android/**/GeneratedPluginRegistrant.java
 *.jks
 *.keystore
+.claude/
