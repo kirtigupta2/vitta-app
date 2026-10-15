@@ -39,7 +39,7 @@ class VittaBottomNav extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 58,
-      padding: const EdgeInsets.all(11),
+      padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 5),
       decoration: BoxDecoration(
         color: const Color(0xF7FFFFFF),
         borderRadius: BorderRadius.circular(32),
