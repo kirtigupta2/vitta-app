@@ -273,7 +273,7 @@ class VittaTopBar extends StatelessWidget {
           () => Navigator.of(context).maybePop(),
           width: 40,
         ),
-        const Icon(Icons.auto_awesome, size: 18, color: VColors.primary),
+        SvgPicture.asset('assets/icons/vitta.svg', width: 18, height: 18),
         const SizedBox(width: 6),
         Text(
           'Vitta',

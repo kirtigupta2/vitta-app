@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import '../theme/tokens.dart';
 
 class VittaTab {
-  const VittaTab(this.label, this.icon);
+  const VittaTab(this.label, this.asset, {this.selectedAsset});
 
   final String label;
-  final IconData icon;
+
+  /// Icon used when the tab is not selected.
+  final String asset;
+
+  /// Separate icon for the selected state. If null, [asset] is tinted blue.
+  final String? selectedAsset;
 }
 
 class VittaBottomNav extends StatelessWidget {
@@ -17,11 +23,13 @@ class VittaBottomNav extends StatelessWidget {
   });
 
   static const tabs = <VittaTab>[
-    VittaTab('Home', Icons.home_rounded),
-    VittaTab('Pay', Icons.payments_outlined),
-    VittaTab('Investment', Icons.trending_up),
-    VittaTab('Benefits', Icons.card_giftcard),
-    VittaTab('Vitta', Icons.auto_awesome),
+    VittaTab('Home', 'assets/icons/tab_home_outline.svg',
+        selectedAsset: 'assets/icons/tab_home.svg'),
+    VittaTab('Pay', 'assets/icons/tab_pay.svg'),
+    VittaTab('Investment', 'assets/icons/tab_investment.svg'),
+    VittaTab('Benefits', 'assets/icons/tab_benefits.svg'),
+    VittaTab('Vitta', 'assets/icons/tab_vitta.svg',
+        selectedAsset: 'assets/icons/tab_vitta_selected.svg'),
   ];
 
   final int selected;
@@ -80,7 +88,14 @@ class _TabButton extends StatelessWidget {
         Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(item.icon, size: 22, color: color),
+            SvgPicture.asset(
+              selected ? (item.selectedAsset ?? item.asset) : item.asset,
+              width: 24,
+              height: 24,
+              colorFilter: selected && item.selectedAsset == null
+                  ? const ColorFilter.mode(VColors.primary, BlendMode.srcIn)
+                  : null,
+            ),
             Text(
               item.label,
               maxLines: 1,

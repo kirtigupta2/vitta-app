@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
 import '../state/vitta_session.dart';
@@ -129,8 +130,10 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ],
                   ),
-                  child: const Icon(Icons.notifications_none,
-                      size: 16, color: Colors.white),
+                  child: Center(
+                    child: SvgPicture.asset('assets/icons/bell.svg',
+                        width: 16, height: 16),
+                  ),
                 ),
               ),
             ],
@@ -186,14 +189,14 @@ class _HomeScreenState extends State<HomeScreen> {
           height: 54,
           child: Row(
             children: const [
-              Expanded(child: _QuickAction(Symbols.swap_horiz, 'Transfer')),
+              Expanded(child: _QuickAction('Transfer', asset: 'assets/icons/qa_transfer.svg')),
               _QuickDivider(),
-              Expanded(child: _QuickAction(Symbols.receipt_long, 'Statement')),
+              Expanded(child: _QuickAction('Statement', icon: Symbols.receipt_long)),
               _QuickDivider(),
-              Expanded(child: _QuickAction(Symbols.star, 'Rewards')),
+              Expanded(child: _QuickAction('Rewards', asset: 'assets/icons/qa_rewards.svg')),
               _QuickDivider(),
               Expanded(
-                  child: _QuickAction(Symbols.account_balance_wallet, 'Wallet')),
+                  child: _QuickAction('Wallet', asset: 'assets/icons/qa_wallet.svg')),
             ],
           ),
         ),
@@ -393,8 +396,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           height: 23,
                           child: Row(
                             children: [
-                              const Icon(Icons.auto_awesome,
-                                  size: 14, color: VColors.primary),
+                              SvgPicture.asset('assets/icons/vitta.svg',
+                                  width: 14, height: 14),
                               const SizedBox(width: 6),
                               Text(
                                 'Long press any card to ask Vitta about it',
@@ -562,10 +565,11 @@ class _HeaderBackground extends StatelessWidget {
 }
 
 class _QuickAction extends StatelessWidget {
-  const _QuickAction(this.icon, this.label);
+  const _QuickAction(this.label, {this.asset, this.icon});
 
-  final IconData icon;
   final String label;
+  final String? asset; // Figma SVG (40 x 40 box)
+  final IconData? icon; // fallback when no SVG is available
 
   @override
   Widget build(BuildContext context) {
@@ -575,9 +579,21 @@ class _QuickAction extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          // 40 px icon box that overlaps the label by 4 px, as in Figma.
           SizedBox(
             height: 36,
-            child: Icon(icon, size: 24, weight: 300, color: Colors.white),
+            child: OverflowBox(
+              alignment: Alignment.topCenter,
+              minHeight: 0,
+              maxHeight: 40,
+              child: asset != null
+                  ? SvgPicture.asset(asset!, width: 40, height: 40)
+                  : SizedBox(
+                      width: 40,
+                      height: 40,
+                      child: Icon(icon, size: 22, weight: 300, color: Colors.white),
+                    ),
+            ),
           ),
           Text(label, style: vText(12, FontWeight.w400, Colors.white, height: 1.5)),
         ],
@@ -760,8 +776,8 @@ class _MiniVitta extends StatelessWidget {
                 top: 12,
                 child: Row(
                   children: [
-                    const Icon(Icons.auto_awesome,
-                        size: 16, color: VColors.primary),
+                    SvgPicture.asset('assets/icons/vitta.svg',
+                        width: 16, height: 16),
                     const SizedBox(width: 5),
                     Text(
                       'Vitta',
