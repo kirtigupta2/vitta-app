@@ -90,19 +90,19 @@ class _CardIntroScreenState extends State<CardIntroScreen> {
     );
   }
 
+  // The banner grows with its text (minimum 104 px), so nothing is cut off.
   Widget _offerCard() {
     return Container(
-      height: 104,
+      constraints: const BoxConstraints(minHeight: 104),
       decoration: offerDecoration(),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(16),
         child: Stack(
           children: [
-            Positioned(
-              left: 11,
-              top: 13,
-              right: 104,
+            Padding(
+              padding: const EdgeInsets.fromLTRB(11, 13, 100, 13),
               child: Column(
+                mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
@@ -120,13 +120,15 @@ class _CardIntroScreenState extends State<CardIntroScreen> {
               ),
             ),
             const Positioned(
-              right: 1,
-              top: 21,
+              right: 4,
+              bottom: 4,
               child: AssetOrPlaceholder(
                 'assets/images/offer_dining.png',
-                width: 102,
-                height: 102,
-                radius: 51,
+                width: 92,
+                height: 92,
+                fit: BoxFit.contain,
+                alignment: Alignment.bottomRight,
+                radius: 46,
                 icon: Icons.local_offer_outlined,
               ),
             ),
@@ -201,7 +203,7 @@ class _CardIntroScreenState extends State<CardIntroScreen> {
             const Positioned.fill(child: VittaBackground()),
             Positioned.fill(
               child: SingleChildScrollView(
-                padding: EdgeInsets.fromLTRB(16, pad.top + 62, 16, pad.bottom + 190),
+                padding: EdgeInsets.fromLTRB(16, pad.top + 62, 16, pad.bottom + 126),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
@@ -226,6 +228,11 @@ class _CardIntroScreenState extends State<CardIntroScreen> {
                     AnimatedSwitcher(
                       duration: const Duration(milliseconds: 250),
                       child: _tab == 0 ? _benefits() : _howItWorks(),
+                    ),
+                    const SizedBox(height: 34),
+                    _GetStartedButton(
+                      onTap: () =>
+                          showProto(context, 'The next step after Get Started'),
                     ),
                   ],
                 ),
@@ -256,14 +263,6 @@ class _CardIntroScreenState extends State<CardIntroScreen> {
               child: const VittaTopBar(
                 serifBrand: true,
                 minimizeStatus: MiniStatus.ready,
-              ),
-            ),
-            Positioned(
-              left: 16,
-              right: 16,
-              bottom: pad.bottom + 72,
-              child: _GetStartedButton(
-                onTap: () => showProto(context, 'The next step after Get Started'),
               ),
             ),
             const VittaDock(),

@@ -100,11 +100,7 @@ class _VittaBuildScreenState extends State<VittaBuildScreen> {
                 boldTitle: true,
                 expanded: _expanded,
                 onToggle: () => setState(() => _expanded = !_expanded),
-                leading: const SizedBox(
-                  width: 16,
-                  height: 16,
-                  child: CircularProgressIndicator(strokeWidth: 2),
-                ),
+                leading: const VittaLoader(size: 16),
                 rows: rows,
               ),
             ),

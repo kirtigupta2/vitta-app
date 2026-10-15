@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import '../state/vitta_session.dart';
 
@@ -252,12 +253,13 @@ class VittaTopBar extends StatelessWidget {
   /// A05 uses a serif wordmark in Figma (DM Serif Text); A04 uses Roboto.
   final bool serifBrand;
 
-  Widget _btn(BuildContext context, IconData icon, String tip, VoidCallback onTap) {
+  Widget _btn(String tip, Widget icon, VoidCallback onTap, {double width = 46}) {
     return IconButton(
       tooltip: tip,
       onPressed: onTap,
-      visualDensity: VisualDensity.compact,
-      icon: Icon(icon, size: 22, color: VColors.textPrimary),
+      padding: EdgeInsets.zero,
+      constraints: BoxConstraints.tightFor(width: width, height: 44),
+      icon: icon,
     );
   }
 
@@ -265,8 +267,12 @@ class VittaTopBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        _btn(context, Icons.chevron_left, 'Back',
-            () => Navigator.of(context).maybePop()),
+        _btn(
+          'Back',
+          const Icon(Icons.chevron_left, size: 22, color: VColors.textPrimary),
+          () => Navigator.of(context).maybePop(),
+          width: 40,
+        ),
         const Icon(Icons.auto_awesome, size: 18, color: VColors.primary),
         const SizedBox(width: 6),
         Text(
@@ -280,16 +286,71 @@ class VittaTopBar extends StatelessWidget {
           ),
         ),
         const Spacer(),
-        _btn(context, Icons.search, 'Search', () => showProto(context, 'Search')),
-        _btn(context, Icons.picture_in_picture_alt_outlined, 'Minimize', () {
-          VittaSession.minimize(minimizeStatus);
-          Navigator.of(context).popUntil((r) => r.isFirst);
-        }),
-        _btn(context, Icons.close, 'Close', () {
-          VittaSession.clear();
-          Navigator.of(context).popUntil((r) => r.isFirst);
-        }),
+        _btn(
+          'Search',
+          const Icon(Icons.search, size: 18, color: VColors.textPrimary),
+          () => showProto(context, 'Search'),
+        ),
+        _btn(
+          'Minimize',
+          SvgPicture.asset('assets/icons/minimize.svg', width: 15, height: 12.5),
+          () {
+            VittaSession.minimize(minimizeStatus);
+            Navigator.of(context).popUntil((r) => r.isFirst);
+          },
+        ),
+        _btn(
+          'Close',
+          const Icon(Icons.close, size: 14, color: VColors.textPrimary),
+          () {
+            VittaSession.clear();
+            Navigator.of(context).popUntil((r) => r.isFirst);
+          },
+        ),
       ],
+    );
+  }
+}
+
+/// The loading icon from Figma, spinning. Falls back to a standard spinner
+/// if assets/images/loader.png is missing.
+class VittaLoader extends StatefulWidget {
+  const VittaLoader({super.key, this.size = 16});
+
+  final double size;
+
+  @override
+  State<VittaLoader> createState() => _VittaLoaderState();
+}
+
+class _VittaLoaderState extends State<VittaLoader>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _c = AnimationController(
+    vsync: this,
+    duration: const Duration(milliseconds: 1000),
+  )..repeat();
+
+  @override
+  void dispose() {
+    _c.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: widget.size,
+      height: widget.size,
+      child: RotationTransition(
+        turns: _c,
+        child: Image.asset(
+          'assets/images/loader.png',
+          width: widget.size,
+          height: widget.size,
+          errorBuilder: (_, __, ___) =>
+              const CircularProgressIndicator(strokeWidth: 2),
+        ),
+      ),
     );
   }
 }

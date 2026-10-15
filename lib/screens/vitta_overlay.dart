@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../theme/tokens.dart';
+import '../widgets/bottom_nav.dart';
 import '../widgets/common.dart';
 import '../widgets/orb.dart';
 import 'vitta_build_screen.dart';
@@ -130,8 +131,9 @@ class _VittaOverlayState extends State<VittaOverlay> {
   @override
   Widget build(BuildContext context) {
     final bottomPad = MediaQuery.of(context).padding.bottom;
-    final orbLeft = widget.pressPoint.dx - 59;
-    final orbTop = widget.pressPoint.dy - 59;
+    const orbSize = 113.0; // 5 px smaller than before
+    final orbLeft = widget.pressPoint.dx - orbSize / 2;
+    final orbTop = widget.pressPoint.dy - orbSize / 2;
 
     return Material(
       type: MaterialType.transparency,
@@ -161,8 +163,8 @@ class _VittaOverlayState extends State<VittaOverlay> {
           Positioned(
             left: orbLeft,
             top: orbTop,
-            width: 118,
-            height: 118,
+            width: orbSize,
+            height: orbSize,
             child: IgnorePointer(
               child: AnimatedOpacity(
                 opacity: _showSuggestions ? 0 : 1,
@@ -173,7 +175,31 @@ class _VittaOverlayState extends State<VittaOverlay> {
                   curve: Curves.easeOutBack,
                   builder: (context, value, child) =>
                       Transform.scale(scale: value, child: child),
-                  child: const VittaOrb(),
+                  child: const VittaOrb(size: orbSize),
+                ),
+              ),
+            ),
+          ),
+
+          // Bottom nav with Vitta selected, shown with the suggestions.
+          Positioned(
+            left: 17.5,
+            right: 17.5,
+            bottom: 16 + bottomPad,
+            child: IgnorePointer(
+              ignoring: !_showSuggestions,
+              child: AnimatedOpacity(
+                opacity: _showSuggestions ? 1 : 0,
+                duration: const Duration(milliseconds: 300),
+                child: VittaBottomNav(
+                  selected: 4,
+                  onTap: (i) {
+                    if (i == 0) {
+                      Navigator.of(context).pop();
+                    } else if (i != 4) {
+                      showProto(context, VittaBottomNav.tabs[i].label);
+                    }
+                  },
                 ),
               ),
             ),

@@ -4,6 +4,7 @@ import 'package:material_symbols_icons/symbols.dart';
 
 import '../state/vitta_session.dart';
 import '../theme/tokens.dart';
+import '../widgets/bottom_nav.dart';
 import '../widgets/common.dart';
 import '../widgets/offer_card.dart';
 import 'card_intro_screen.dart';
@@ -21,14 +22,6 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   // Figma shows the balance hidden by default.
   bool _hidden = true;
-
-  static const _tabs = <_TabItem>[
-    _TabItem('Home', Icons.home_rounded),
-    _TabItem('Pay', Icons.payments_outlined),
-    _TabItem('Investment', Icons.trending_up),
-    _TabItem('Benefits', Icons.card_giftcard),
-    _TabItem('Vitta', Icons.auto_awesome),
-  ];
 
   String get _balance => _hidden ? '\$ ••••••' : '\$ 12,450.00';
 
@@ -75,7 +68,8 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _title(String text) =>
-      Text(text, style: vText(16, FontWeight.w700, VColors.textPrimary, height: 1.4));
+      Text(text,
+          style: vText(16, FontWeight.w700, VColors.textPrimary, height: 18 / 16));
 
   Widget _padded(Widget child) =>
       Padding(padding: const EdgeInsets.symmetric(horizontal: 15), child: child);
@@ -85,7 +79,7 @@ class _HomeScreenState extends State<HomeScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SizedBox(
-          height: 44,
+          height: 40,
           child: Row(
             children: [
               // The avatar PNG is a transparent cut-out, so it needs the
@@ -142,7 +136,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ],
           ),
         ),
-        const SizedBox(height: 12),
+        const SizedBox(height: 16),
         SizedBox(
           height: 36,
           child: Row(
@@ -209,11 +203,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _offerList() {
     return SizedBox(
-      height: 79,
+      height: 63,
       child: ListView(
         scrollDirection: Axis.horizontal,
         clipBehavior: Clip.none,
-        padding: const EdgeInsets.fromLTRB(15, 8, 15, 8),
+        padding: const EdgeInsets.symmetric(horizontal: 15),
         children: const [
           AskVittaCard(
             child: OfferCard(
@@ -259,7 +253,7 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             Text(
               'Potential investments areas for you',
-              style: vText(14, FontWeight.w500, VColors.textPrimary, height: 1.3),
+              style: vText(14, FontWeight.w500, VColors.textPrimary, height: 18 / 14),
             ),
             const SizedBox(height: 16),
             const Row(
@@ -292,6 +286,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     bg: Color(0xFFE23B2E),
                     fg: Colors.white,
                     icon: Icons.bolt,
+                    logoSize: 32,
                   ),
                 ),
               ],
@@ -351,12 +346,12 @@ class _HomeScreenState extends State<HomeScreen> {
               top: 0,
               left: 0,
               right: 0,
-              height: pad.top + 260,
+              height: pad.top + 241,
               child: const _HeaderBackground(),
             ),
             // Translucent panel behind the quick actions.
             Positioned(
-              top: pad.top + 149,
+              top: pad.top + 119,
               left: 16,
               right: 16,
               height: 82,
@@ -375,14 +370,14 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             Positioned(
-              top: pad.top + 33,
+              top: pad.top + 3,
               left: 16,
               right: 16,
               child: _header(),
             ),
             // White content sheet.
             Positioned(
-              top: pad.top + 225,
+              top: pad.top + 195,
               left: 0,
               right: 0,
               bottom: 0,
@@ -394,43 +389,51 @@ class _HomeScreenState extends State<HomeScreen> {
                     padding: EdgeInsets.only(top: 16, bottom: 110 + pad.bottom),
                     children: [
                       _padded(
-                        Row(
-                          children: [
-                            const Icon(Icons.auto_awesome,
-                                size: 14, color: VColors.primary),
-                            const SizedBox(width: 6),
-                            Text(
-                              'Long press any card to ask Vitta about it',
-                              style: vText(11, FontWeight.w700, VColors.primary),
-                            ),
-                          ],
+                        SizedBox(
+                          height: 23,
+                          child: Row(
+                            children: [
+                              const Icon(Icons.auto_awesome,
+                                  size: 14, color: VColors.primary),
+                              const SizedBox(width: 6),
+                              Text(
+                                'Long press any card to ask Vitta about it',
+                                style: vText(11, FontWeight.w700, VColors.primary),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                       const SizedBox(height: 24),
                       _padded(_title('Recommended for you')),
-                      const SizedBox(height: 4),
+                      const SizedBox(height: 12),
                       _offerList(),
-                      const SizedBox(height: 8),
+                      const SizedBox(height: 16),
                       _padded(_title('Grow Your Portfolio')),
                       const SizedBox(height: 12),
                       _padded(_portfolioCard()),
-                      const SizedBox(height: 24),
+                      const SizedBox(height: 16),
                       _padded(
-                        Row(
-                          children: [
-                            _title('Upcoming Payments'),
-                            const Spacer(),
-                            IconButton(
-                              tooltip: 'View upcoming payments',
-                              padding: EdgeInsets.zero,
-                              constraints: const BoxConstraints.tightFor(
-                                  width: 32, height: 32),
-                              onPressed: () =>
-                                  showProto(context, 'Upcoming payments'),
-                              icon: const Icon(Icons.chevron_right,
-                                  size: 22, color: VColors.textPrimary),
-                            ),
-                          ],
+                        SizedBox(
+                          height: 22.5,
+                          child: Row(
+                            children: [
+                              Text(
+                                'Upcoming Payments',
+                                style: vText(16, FontWeight.w700,
+                                    VColors.textPrimary,
+                                    height: 22.5 / 16),
+                              ),
+                              const Spacer(),
+                              InkResponse(
+                                radius: 22,
+                                onTap: () =>
+                                    showProto(context, 'Upcoming payments'),
+                                child: const Icon(Icons.chevron_right,
+                                    size: 20, color: VColors.textPrimary),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                       const SizedBox(height: 12),
@@ -468,11 +471,10 @@ class _HomeScreenState extends State<HomeScreen> {
               left: 17.5,
               right: 17.5,
               bottom: 16 + pad.bottom,
-              child: _BottomNav(
-                tabs: _tabs,
+              child: VittaBottomNav(
                 selected: 0,
                 onTap: (i) {
-                  if (i != 0) showProto(context, _tabs[i].label);
+                  if (i != 0) showProto(context, VittaBottomNav.tabs[i].label);
                 },
               ),
             ),
@@ -611,8 +613,10 @@ class _Stock extends StatelessWidget {
     required this.bg,
     required this.fg,
     required this.icon,
+    this.logoSize = 36,
   });
 
+  final double logoSize;
   final String symbol;
   final String change;
   final String asset;
@@ -627,8 +631,8 @@ class _Stock extends StatelessWidget {
       children: [
         AssetOrPlaceholder(
           asset,
-          width: 36,
-          height: 36,
+          width: logoSize,
+          height: logoSize,
           radius: 6.4,
           icon: icon,
           color: bg,
@@ -681,6 +685,7 @@ class _PaymentRow extends StatelessWidget {
                 Text(name,
                     style: vText(14, FontWeight.w500, VColors.textPrimary,
                         height: 1.5)),
+                const SizedBox(height: 2),
                 Text(due,
                     style: vText(12, FontWeight.w400, VColors.textSecondary,
                         height: 1.5)),
@@ -689,93 +694,9 @@ class _PaymentRow extends StatelessWidget {
           ),
           Text(amount, style: vText(14, FontWeight.w700, VColors.textPrimary)),
           const SizedBox(width: 4),
-          const Icon(Icons.chevron_right, size: 16, color: VColors.textPrimary),
+          const Icon(Icons.chevron_right, size: 12, color: VColors.textPrimary),
         ],
       ),
-    );
-  }
-}
-
-class _TabItem {
-  const _TabItem(this.label, this.icon);
-
-  final String label;
-  final IconData icon;
-}
-
-class _BottomNav extends StatelessWidget {
-  const _BottomNav({
-    required this.tabs,
-    required this.selected,
-    required this.onTap,
-  });
-
-  final List<_TabItem> tabs;
-  final int selected;
-  final ValueChanged<int> onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 58,
-      padding: const EdgeInsets.all(11),
-      decoration: BoxDecoration(
-        color: const Color(0xF7FFFFFF),
-        borderRadius: BorderRadius.circular(32),
-        border: Border.all(color: const Color(0x266D8FFF)),
-        boxShadow: VShadows.floating,
-      ),
-      child: Row(
-        children: [
-          for (var i = 0; i < tabs.length; i++)
-            Expanded(
-              child: InkWell(
-                borderRadius: BorderRadius.circular(16),
-                onTap: () => onTap(i),
-                child: _TabButton(item: tabs[i], selected: i == selected),
-              ),
-            ),
-        ],
-      ),
-    );
-  }
-}
-
-class _TabButton extends StatelessWidget {
-  const _TabButton({required this.item, required this.selected});
-
-  final _TabItem item;
-  final bool selected;
-
-  @override
-  Widget build(BuildContext context) {
-    final color = selected ? VColors.primary : VColors.textSecondary;
-    return Stack(
-      alignment: Alignment.center,
-      children: [
-        if (selected)
-          Container(
-            width: 64,
-            height: 40,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
-              gradient: const RadialGradient(
-                colors: [Color(0x33084BA4), Color(0x00084BA4)],
-              ),
-            ),
-          ),
-        Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(item.icon, size: 22, color: color),
-            Text(
-              item.label,
-              maxLines: 1,
-              style: vText(11, FontWeight.w700, color, height: 1.1),
-            ),
-          ],
-        ),
-      ],
     );
   }
 }
